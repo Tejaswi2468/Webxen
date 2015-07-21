@@ -47,7 +47,7 @@ public class HeadController {
 		ApplicationContext contextDAO = new ClassPathXmlApplicationContext("applicationContextDAO.xml");
 		OracleFactDAO oracleFactDAO = contextDAO.getBean("oracleFactDAO", OracleFactDAO.class);
 		
-		oracleFactDAO.fetchDIM();
+		String a=oracleFactDAO.loadCSV(directoryPath);
 		
 		modelAndView.addObject("msg", "Your files have succesfully been loaded.");
 		return modelAndView;
