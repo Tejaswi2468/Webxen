@@ -41,6 +41,7 @@ public class HeadController {
 		System.out.println("inside generate csv");
 		ModelAndView modelAndView = new ModelAndView("csvLoad");
 		
+
 		ApplicationContext contextDAO = new ClassPathXmlApplicationContext("applicationContextDAO.xml");
 		OracleFactDAO oracleFactDAO = contextDAO.getBean("oracleFactDOA", OracleFactDAO.class);
 		
