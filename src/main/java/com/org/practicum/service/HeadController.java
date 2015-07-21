@@ -41,11 +41,13 @@ public class HeadController {
 		System.out.println("inside generate csv");
 		ModelAndView modelAndView = new ModelAndView("csvLoad");
 		
-
+       
+		@SuppressWarnings("resource")
 		ApplicationContext contextDAO = new ClassPathXmlApplicationContext("applicationContextDAO.xml");
-		OracleFactDAO oracleFactDAO = contextDAO.getBean("oracleFactDOA", OracleFactDAO.class);
+		OracleFactDAO oracleFactDAO = contextDAO.getBean("oracleFactDAO", OracleFactDAO.class);
 		
 		oracleFactDAO.fetchDIM();
+		
 		modelAndView.addObject("msg", "Your files have succesfully been loaded.");
 		return modelAndView;
 	}

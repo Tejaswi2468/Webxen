@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class OracleFactDAO {
 //naach banadriya
 	private DataSource dataSource;
@@ -54,7 +55,7 @@ public class OracleFactDAO {
 	}
     public void fetchDIM()
     {
-    	String sql="select table_name from table_users";
+    	String sql="select table_name from user_tables";
     	List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		System.out.println(list.get(0));
 		
