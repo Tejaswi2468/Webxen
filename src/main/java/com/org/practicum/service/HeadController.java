@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.org.practicum.dao.OracleFactDAO;
@@ -37,9 +38,9 @@ public class HeadController {
 	}
 	
 	@RequestMapping(value = "/generateCsv", method = RequestMethod.POST)
-	public ModelAndView postCsvForm() {
-		System.out.println("inside generate csv");
-		ModelAndView modelAndView = new ModelAndView("csvLoad");
+	public ModelAndView postCsvForm(@RequestParam(value = "directoryPath") String directoryPath) {
+		System.out.println("inside generate csv: "+directoryPath);
+		ModelAndView modelAndView = new ModelAndView("csvLoaded");
 		
 		//tada
 		
