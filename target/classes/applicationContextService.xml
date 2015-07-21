@@ -10,8 +10,4 @@
 
 	</context:component-scan>
 
-	<bean id="namedParaSup" class="dbConnection.NamedParaSup">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
 </beans>

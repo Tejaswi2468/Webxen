@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.org.practicum.dao.OracleFactDAO;
-
 @Controller
 // @RequestMapping("")
 public class HeadController {
@@ -21,35 +19,40 @@ public class HeadController {
 		modelAndView.addObject("msg", "Welcome To Webxen!");
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginForm() {
-		
+
 		ModelAndView modelAndView = new ModelAndView("actionChoice");
 		modelAndView.addObject("msg", "Welcome");
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/csvForm", method = RequestMethod.GET)
 	public ModelAndView getCsvForm() {
 		ModelAndView modelAndView = new ModelAndView("csvForm");
 		modelAndView.addObject("msg", "Welcome");
 		return modelAndView;
 	}
-	
+
 	@RequestMapping(value = "/generateCsv", method = RequestMethod.POST)
 	public ModelAndView postCsvForm(@RequestParam(value = "directoryPath") String directoryPath) {
-		System.out.println("inside generate csv: "+directoryPath);
-		ModelAndView modelAndView = new ModelAndView("csvLoaded");
 		
-       
+		ModelAndView modelAndView;
+		System.out.println("inside generate csv: " + directoryPath);
+		
 		@SuppressWarnings("resource")
-		ApplicationContext contextDAO = new ClassPathXmlApplicationContext("applicationContextDAO.xml");
-		OracleFactDAO oracleFactDAO = contextDAO.getBean("oracleFactDAO", OracleFactDAO.class);
-		
-		oracleFactDAO.fetchDIM();
-		
-		modelAndView.addObject("msg", "Your files have succesfully been loaded.");
+		ApplicationContext serviceContext = new ClassPathXmlApplicationContext("applicationContextService.xml");
+		OracleServiceController oracleService = serviceContext.getBean("oracleServiceController",
+				OracleServiceController.class);
+		String error = oracleService.loadCSV(directoryPath);
+		if (error != null && error.trim().length() > 0) {
+			modelAndView = new ModelAndView("error");
+			modelAndView.addObject("msg", error);
+		} else {
+			modelAndView = new ModelAndView("csvLoaded");
+			modelAndView.addObject("msg", "Your files have succesfully been loaded.");
+		}
 		return modelAndView;
 	}
 }
