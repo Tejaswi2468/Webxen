@@ -8,11 +8,6 @@
 </head>
 <body>
 	<h1>${msg}</h1>
-	<h3>Please Login to Continue</h3>
-	<form action="/Webxen/login" method="post">
-		Username: <input type="text" name="userName" /> <br /> <br />
-		Password: <input type="password" name="password" /> <br />
-		<input type="submit" value="submit" />
-	</form>
+	<a href = "#">generate graphs</a>
 </body>
 </html>

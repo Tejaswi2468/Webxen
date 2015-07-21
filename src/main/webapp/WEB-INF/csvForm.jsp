@@ -4,15 +4,14 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Webxen</title>
+<title>Welcome to Webxen</title>
 </head>
 <body>
-	<h1>${msg}</h1>
-	<h3>Please Login to Continue</h3>
-	<form action="/Webxen/login" method="post">
-		Username: <input type="text" name="userName" /> <br /> <br />
-		Password: <input type="password" name="password" /> <br />
-		<input type="submit" value="submit" />
+
+	<form action="/Webxen/generateCsv" method = "post">
+	<input type = "text" name = "directoryPath"/> 
+	<input type = "submit" value = "Generate CSV"/>
 	</form>
+
 </body>
 </html>
