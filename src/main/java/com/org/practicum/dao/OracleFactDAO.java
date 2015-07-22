@@ -31,8 +31,8 @@ public class OracleFactDAO {
 
 	public String loadCSV(String directoryPath) {
 		List<String> a = this.fetchDIM();
-		this.columnNamesCSV(a);
-		return null;
+		String e=this.columnNamesCSV(a);
+		return e;
 	}
 
 	public NamedParameterJdbcTemplate getNameParaJdbcTemp() {
@@ -81,7 +81,8 @@ public class OracleFactDAO {
 		return dimTables;
 	}
 
-	private boolean columnNamesCSV(List<String> dimTables) {
+	private String columnNamesCSV(List<String> dimTables) {
+		String error="";
 		for (int i = 0; i < dimTables.size(); i++) {
 			String sql = "select COLUMN_NAME from user_tab_columns where table_name='" + dimTables.get(i) + "'";
 			// String sql="select * from "+dimTables.get(i);
@@ -95,14 +96,15 @@ public class OracleFactDAO {
 
 			}
 			// System.out.println(i+" "+list.get(0));
-			boolean random = createCSV(columnNames, dimTables.get(i));
+			 error= createCSV(columnNames, dimTables.get(i));
 		}
-		return false;
+		return error;
 	}
 
-	private boolean createCSV(List<String> columnNames, String tableName)// directory
+	private String createCSV(List<String> columnNames, String tableName)// directory
 																			// path
 	{
+		String error="";
 		StringBuilder builder = new StringBuilder();
 		for (int k = 0; k < columnNames.size() - 1; k++) {
 			builder.append(columnNames.get(k));
@@ -154,6 +156,7 @@ public class OracleFactDAO {
 
 		} catch (Exception e) {
 			System.out.println("Error in CsvFileWriter !!!");
+			error=String.valueOf(e);
 			e.printStackTrace();
 		} finally {
 
@@ -162,12 +165,13 @@ public class OracleFactDAO {
 				fileWriter.close();
 			} catch (IOException e) {
 				System.out.println("Error while flushing/closing fileWriter !!!");
+				error=String.valueOf(e);
 				e.printStackTrace();
 			}
 
 		}
 
-		return false;
+		return error;
 	}
 
 }
