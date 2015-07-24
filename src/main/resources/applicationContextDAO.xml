@@ -19,8 +19,5 @@
 		<property name="password" value="mellon" />
 
 	</bean>
-	<!-- <bean id="namedParaSup" class="dbConnection.NamedParaSup">
-		<property name="dataSource" ref="dataSource" />
-	</bean> -->
 
 </beans>

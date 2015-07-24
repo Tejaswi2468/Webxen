@@ -11,11 +11,18 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 // @RequestMapping("")
 public class HeadController {
+	
+	private static ApplicationContext serviceContext;
+	private static OracleServiceController oracleService;
+			
 
 	@RequestMapping("")
 
 	public ModelAndView helloWorld() {
 		ModelAndView modelAndView = new ModelAndView("index");
+		serviceContext = new ClassPathXmlApplicationContext("applicationContextService.xml");
+		oracleService = serviceContext.getBean("oracleServiceController",
+				OracleServiceController.class);
 		modelAndView.addObject("msg", "Welcome To Webxen!");
 		return modelAndView;
 	}
@@ -41,10 +48,7 @@ public class HeadController {
 		ModelAndView modelAndView;
 		System.out.println("inside generate csv: " + directoryPath);
 		
-		@SuppressWarnings("resource")
-		ApplicationContext serviceContext = new ClassPathXmlApplicationContext("applicationContextService.xml");
-		OracleServiceController oracleService = serviceContext.getBean("oracleServiceController",
-				OracleServiceController.class);
+		
 		String error = oracleService.loadCSV(directoryPath);
 		if (error != null && error.trim().length() > 0) {
 			modelAndView = new ModelAndView("error");

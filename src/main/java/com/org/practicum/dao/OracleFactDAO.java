@@ -11,27 +11,20 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OracleFactDAO {
-	// naach banadriya
+
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;// = new JdbcTemplate();
 	private NamedParameterJdbcTemplate nameParaJdbcTemp;
 	private static final String commaDelimiter = ",";
 	private static final String newLineSeparator = "\n";
-	/*
-	 * it is deprecated to declare both kinds of templates. hence use simple
-	 * jdbc template. used for 1.5 or above jdks. par ye to idhar ulta dikha
-	 * raha hai....kya fart hai bc!
-	 */
-	private SimpleJdbcTemplate smpleJdbcTemp;
 
 	public String loadCSV(String directoryPath) {
 		List<String> a = this.fetchDIM();
-		String e=this.columnNamesCSV(a);
+		String e = this.columnNamesCSV(a);
 		return e;
 	}
 
@@ -59,8 +52,6 @@ public class OracleFactDAO {
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		// normally, you use only either jdbc temp or named para jdbc temp. but
-		// since the coding is only an example, let both remain.
 		this.nameParaJdbcTemp = new NamedParameterJdbcTemplate(dataSource);
 	}
 
@@ -75,17 +66,18 @@ public class OracleFactDAO {
 				dimTables.add(s);
 			}
 		}
-		System.out.println(dimTables.size());
-		for (int j = 0; j < dimTables.size(); j++)
+		
+		for (int j = 0; j < dimTables.size(); j++){
 			System.out.println(dimTables.get(j));
+		}			
 		return dimTables;
 	}
 
 	private String columnNamesCSV(List<String> dimTables) {
-		String error="";
+		String error = "";
 		for (int i = 0; i < dimTables.size(); i++) {
 			String sql = "select COLUMN_NAME from user_tab_columns where table_name='" + dimTables.get(i) + "'";
-			// String sql="select * from "+dimTables.get(i);
+			
 			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 
 			List<String> columnNames = new ArrayList<String>();
@@ -95,16 +87,16 @@ public class OracleFactDAO {
 				columnNames.add(s);
 
 			}
-			// System.out.println(i+" "+list.get(0));
-			 error= createCSV(columnNames, dimTables.get(i));
+			
+			error = createCSV(columnNames, dimTables.get(i));
 		}
 		return error;
 	}
 
 	private String createCSV(List<String> columnNames, String tableName)// directory
-																			// path
+																		// path
 	{
-		String error="";
+		String error = "";
 		StringBuilder builder = new StringBuilder();
 		for (int k = 0; k < columnNames.size() - 1; k++) {
 			builder.append(columnNames.get(k));
@@ -124,26 +116,32 @@ public class OracleFactDAO {
 			fileWriter.append(fileheader);
 			// Add a new line separator after the header
 			fileWriter.append(newLineSeparator);
-			System.out.println(tableName + "list" + list.size());
+//			System.out.println(tableName + "list" + list.size());
 			// Write a new student object list to the CSV file
 			for (int j = 0; j < list.size(); j++) {
 				Map<String, Object> m = list.get(j);
-				System.out.println(tableName + "m" + m.size());
+//				System.out.println(tableName + "m" + m.size());
 				for (String cn : columnNames) {
 					Object obj = (Object) m.get(cn);
-					System.out.println("obj : " + obj);
+//					System.out.println("obj : " + obj);
 					String s = "";
 
 					if (obj != null) {
-						s = obj.toString();
+						s = String.valueOf(obj);
 					}
-					System.out.println("s : " + s);
+//					System.out.println("s : " + s);
 
 					/*
 					 * String s1=String.valueOf(obj); System.out.println("s : "
 					 * +s1);
 					 */
-					fileWriter.append(s);
+					String x = s;
+					if(s.contains(",")){
+						System.out.println(s);
+						x = s.replace(',', '_');
+						System.out.println(x+"\t"+s);
+					}
+					fileWriter.append(x);
 
 					fileWriter.append(commaDelimiter);
 
@@ -156,7 +154,7 @@ public class OracleFactDAO {
 
 		} catch (Exception e) {
 			System.out.println("Error in CsvFileWriter !!!");
-			error=String.valueOf(e);
+			error = String.valueOf(e);
 			e.printStackTrace();
 		} finally {
 
@@ -165,7 +163,7 @@ public class OracleFactDAO {
 				fileWriter.close();
 			} catch (IOException e) {
 				System.out.println("Error while flushing/closing fileWriter !!!");
-				error=String.valueOf(e);
+				error = String.valueOf(e);
 				e.printStackTrace();
 			}
 
